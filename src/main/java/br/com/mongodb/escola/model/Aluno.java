@@ -39,8 +39,12 @@ public class Aluno {
 		return dataNascimento;
 	}
 
-	public void setDataNascimento(Date dataNascimento) {
-		this.dataNascimento = dataNascimento;
+	public void setDataNascimento(String dataNascimento) {
+		Integer year = Integer.valueOf(dataNascimento.substring(0, 4));
+		Integer month = Integer.valueOf(dataNascimento.substring(6, 7));
+		Integer day = Integer.valueOf(dataNascimento.substring(9, 10));
+
+		this.dataNascimento = new Date(year, month, day);
 	}
 
 	public Curso getCurso() {
