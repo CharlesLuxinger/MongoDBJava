@@ -1,0 +1,119 @@
+1. Criar uma nova coleção
+    > db.createCollection("aluno");
+
+2. Insert
+    > db.alunos.insert(
+                        {
+                                "nome" : "Charles",
+                                "data_nascimento" : new Date(1988,06,02),
+                                "curso" : {
+                                    "nome" : "Sistema de Informação"
+                                },
+                                "notas" : [10.0, 9.5, 8.7],
+                                "skills":[
+                                    {
+                                        "nome" : "Inglês",
+                                        "nível": "Intermediário"
+
+                                    },
+                                    {
+                                        "nome" : "Java",
+                                        "nível": "Avançado"
+                                    }
+                                ]
+                        }
+                      )
+
+3. Query
+    > db.alunos.find()
+    
+    > db.alunos.find().pretty()
+   
+    > db.alunos.find({"nome" : "Charles"}).pretty()
+   
+    > db.alunos.find({"habilidades.nome" : "Inglês"}).pretty()
+   
+    > db.alunos.find({"nome" : "Charles", "habilidades.nome" : "Inglês"}).pretty()
+   
+    > db.alunos.find($or : [{"curso.nome" : "Sistema de Informação"}, {"curso.nome" : "Engenharia da Computação"}]).pretty()
+    
+    > db.alunos.find($or : [{"curso.nome" : "Sistema de Informação"}, {"curso.nome" : "Engenharia da Computação"}],
+                    "nome" : "Charles").pretty()
+   
+    > db.alunos.find({"curso.nome" : { $in: ["Sistema de Informação", "Engenharia da Computação"]}}).pretty()
+    
+    > Greater than
+        db.alunos.find({
+            notas : { $gt : 5 }
+        })
+        db.alunos.findOne({
+            notas : { $gt : 5}
+        })
+    > Less than
+        db.alunos.find({"notas":{$lt:5}})
+
+    > ordem crescente:
+        db.alunos.find().sort({"nome" : 1})
+    
+    > ordem decrescente:
+        db.alunos.find().sort({"nome" : -1})
+
+    > db.alunos.find().sort({"nome" : 1}).limit(3)
+
+    > Busca por coordenada geográfica
+        db.alunos.createIndex({
+            localizacao : "2dsphere"
+        })
+
+        db.alunos.aggregate([
+                                {
+                                    $geoNear : {
+                                        near : {
+                                            coordinates: [-23.5640265, -46.6527128],
+                                            type : "Point"
+                                        },
+                                        distanceField : "distancia.calculada",
+                                        spherical : true,
+                                        num : 4
+                                    }
+                                },
+                                { $skip :1 }
+                            ])
+                            
+4. Remove
+    > db.alunos.remove({ "_id":ObjectId("5da1f16a060f45aa3172cab9") })
+
+4. Update
+    > db.alunos.update (
+                        {"curso.nome" : "Sistema de informação"}
+                        $set : {"curso.nome" : "Sistemas de informação"}
+                       )
+    > db.alunos.update (
+                        {"curso.nome" : "Sistema de informação"}
+                        $set : {"curso.nome" : "Sistemas de Informação"}, 
+                        {multi : true}
+                       )
+    > db.alunos.update(
+                        {"_id" : ObjectId("56cb0002b6d75ec12f75d3b5")},
+                        {
+                            $push : {
+                                notas : 8.5
+                            }    
+                        }
+                      )
+    > db.alunos.update(
+                        {"_id" : ObejctId("56cb0139b6d75ec12f75d3b6")},
+                        {
+                            $push : {
+                                "notas" : {$each : [8.5, 3] }
+                            }
+                        }
+                      )
+
+5. Imports
+    > mongoimport -c coleção --jsonArray < arquivo.json
+
+6. Create index
+    > db.alunos.createIndex({
+                                localizacao : "2dsphere"
+                            })
