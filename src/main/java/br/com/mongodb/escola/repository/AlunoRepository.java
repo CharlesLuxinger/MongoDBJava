@@ -7,6 +7,7 @@ import org.bson.Document;
 import org.bson.codecs.Codec;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Repository;
 
 import com.mongodb.MongoClient;
@@ -14,6 +15,7 @@ import com.mongodb.MongoClientOptions;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 
 import br.com.mongodb.escola.codecs.AlunoCodec;
 import br.com.mongodb.escola.model.Aluno;
@@ -30,6 +32,16 @@ public class AlunoRepository {
 		alunosCollection.insertOne(aluno);
 
 		client.close();
+	}
+
+	public Aluno findById(String id) {
+		createConnection();
+
+		Aluno aluno = alunosCollection.find(Filters.eq("_id", new ObjectId(id))).first();
+
+		client.close();
+
+		return aluno;
 	}
 
 	public List<Aluno> findAll() {
