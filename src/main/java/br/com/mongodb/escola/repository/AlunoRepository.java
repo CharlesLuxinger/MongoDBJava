@@ -29,7 +29,11 @@ public class AlunoRepository {
 	public void salvar(Aluno aluno) {
 		createConnection();
 
-		alunosCollection.insertOne(aluno);
+		if (aluno.getId() == null) {
+			alunosCollection.insertOne(aluno);
+		} else {
+			alunosCollection.updateOne(Filters.eq("_id", aluno.getId()), new Document("$set", aluno));
+		}
 
 		client.close();
 	}

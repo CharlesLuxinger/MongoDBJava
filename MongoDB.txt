@@ -81,7 +81,7 @@
                             ])
                             
 4. Remove
-    > db.alunos.remove({ "_id":ObjectId("5da1f16a060f45aa3172cab9") })
+    > db.alunos.remove({ "_id": ObjectId("5da1f24b060f45aa3172caba") })
 
 4. Update
     > db.alunos.update (

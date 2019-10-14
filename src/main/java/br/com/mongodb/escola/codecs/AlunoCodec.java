@@ -1,6 +1,8 @@
 package br.com.mongodb.escola.codecs;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.bson.BsonReader;
 import org.bson.BsonString;
@@ -15,6 +17,7 @@ import org.bson.types.ObjectId;
 
 import br.com.mongodb.escola.model.Aluno;
 import br.com.mongodb.escola.model.Curso;
+import br.com.mongodb.escola.model.Habilidade;
 
 public class AlunoCodec implements CollectibleCodec<Aluno> {
 
@@ -30,6 +33,7 @@ public class AlunoCodec implements CollectibleCodec<Aluno> {
 		String nome = aluno.getNome();
 		Date dataNascimento = aluno.getDataNascimento();
 		Curso curso = aluno.getCurso();
+		List<Habilidade> habilidades = aluno.getHabilidades();
 
 		Document document = new Document();
 
@@ -37,6 +41,16 @@ public class AlunoCodec implements CollectibleCodec<Aluno> {
 		document.put("nome", nome);
 		document.put("dataNascimento", dataNascimento);
 		document.put("curso", new Document("nome", curso.getNome()));
+
+		if (habilidades != null) {
+			List<Document> habilidadesDocument = new ArrayList<Document>();
+			
+			habilidades.forEach(habilidade -> 
+				habilidadesDocument.add(new Document("nome", habilidade.getNome())
+											.append("nível", habilidade.getNivel())));
+			
+			document.put("habilidades", habilidadesDocument);
+		}
 
 		codec.encode(writer, document, encoderContext);
 	}

@@ -1,5 +1,6 @@
 package br.com.mongodb.escola.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -38,9 +39,9 @@ public class Aluno {
 	public Date getDataNascimento() {
 		return dataNascimento;
 	}
-	
+
 	public void setDataNascimento(Date dataNascimento) {
-		this.dataNascimento = dataNascimento;		
+		this.dataNascimento = dataNascimento;
 	}
 
 	public void setDataNascimento(String dataNascimento) {
@@ -68,6 +69,9 @@ public class Aluno {
 	}
 
 	public List<Habilidade> getHabilidades() {
+		if(this.habilidades == null) {
+			this.habilidades = new ArrayList<Habilidade>();
+		}
 		return habilidades;
 	}
 
@@ -80,5 +84,16 @@ public class Aluno {
 		return this;
 	}
 
+	public void addHabilidade(Habilidade habilidade) throws IllegalAccessException {
+		List<Habilidade> list = this.getHabilidades();
+
+		if (habilidade == null) {
+			throw new IllegalAccessException("O parâmetro habilidades é requerido");
+		}
+
+		list.add(habilidade);
+		this.setHabilidades(list);
+
+	}
 
 }
