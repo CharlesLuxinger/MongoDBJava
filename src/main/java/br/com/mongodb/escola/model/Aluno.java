@@ -38,6 +38,10 @@ public class Aluno {
 	public Date getDataNascimento() {
 		return dataNascimento;
 	}
+	
+	public void setDataNascimento(Date dataNascimento) {
+		this.dataNascimento = dataNascimento;		
+	}
 
 	public void setDataNascimento(String dataNascimento) {
 		Integer year = Integer.valueOf(dataNascimento.substring(0, 4));
@@ -75,5 +79,6 @@ public class Aluno {
 		setId(new ObjectId());
 		return this;
 	}
+
 
 }

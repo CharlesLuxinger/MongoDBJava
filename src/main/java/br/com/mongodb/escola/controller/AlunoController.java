@@ -1,5 +1,7 @@
 package br.com.mongodb.escola.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +19,13 @@ public class AlunoController {
 
 	@Autowired
 	private AlunoRepository alunoRepository;
+
+	@GetMapping("/listar")
+	public String listar(Model model) {
+		List<Aluno> alunos = alunoRepository.findAll();
+		model.addAttribute("alunos", alunos);
+		return "aluno/listar";
+	}
 
 	@GetMapping("/cadastrar")
 	public String cadastrar(Model model) {
