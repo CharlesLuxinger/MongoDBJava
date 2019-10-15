@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import br.com.mongodb.escola.model.Aluno;
 import br.com.mongodb.escola.repository.AlunoRepository;
@@ -45,5 +46,17 @@ public class AlunoController {
 	public String salvar(@ModelAttribute Aluno aluno) {
 		alunoRepository.salvar(aluno);
 		return "redirect:/";
+	}
+
+	@GetMapping("/pesquisarnome")
+	public String pesquisarNome() {
+		return "aluno/pesquisarnome";
+	}
+
+	@GetMapping("/pesquisar")
+	public String pesquisar(@RequestParam("nome") String nome, Model model) {
+		List<Aluno> alunos = alunoRepository.findByName(nome);
+		model.addAttribute("alunos", alunos);
+		return "aluno/pesquisarnome";
 	}
 }

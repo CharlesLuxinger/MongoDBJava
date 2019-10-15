@@ -35,7 +35,7 @@ public class AlunoRepository {
 			alunosCollection.updateOne(Filters.eq("_id", aluno.getId()), new Document("$set", aluno));
 		}
 
-		client.close();
+		closeConnection();
 	}
 
 	public Aluno findById(String id) {
@@ -43,7 +43,7 @@ public class AlunoRepository {
 
 		Aluno aluno = alunosCollection.find(Filters.eq("_id", new ObjectId(id))).first();
 
-		client.close();
+		closeConnection();
 
 		return aluno;
 	}
@@ -51,18 +51,30 @@ public class AlunoRepository {
 	public List<Aluno> findAll() {
 		createConnection();
 
-		MongoCursor<Aluno> result = alunosCollection.find().iterator();
+		MongoCursor<Aluno> results = alunosCollection.find().iterator();
 
-		List<Aluno> alunos = new ArrayList<Aluno>();
+		List<Aluno> alunos = addAlunos(results);
 
-		while (result.hasNext()) {
-			alunos.add(result.next());
-		}
-
-		client.close();
+		closeConnection();
 
 		return alunos;
 
+	}
+
+	public List<Aluno> findByName(String nome) {
+		createConnection();
+
+		MongoCursor<Aluno> results = alunosCollection.find(Filters.eq("nome", nome), Aluno.class).iterator();
+
+		List<Aluno> alunos = addAlunos(results);
+
+		closeConnection();
+
+		return alunos;
+	}
+
+	private void closeConnection() {
+		client.close();
 	}
 
 	private void createConnection() {
@@ -77,4 +89,17 @@ public class AlunoRepository {
 		MongoDatabase database = client.getDatabase("test");
 		alunosCollection = database.getCollection("alunos", Aluno.class);
 	}
+
+	private List<Aluno> addAlunos(MongoCursor<Aluno> results) {
+
+		List<Aluno> alunos = new ArrayList<Aluno>();
+
+		while (results.hasNext()) {
+			alunos.add(results.next());
+
+		}
+
+		return alunos;
+	}
+
 }
