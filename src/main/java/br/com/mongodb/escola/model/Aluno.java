@@ -61,6 +61,9 @@ public class Aluno {
 	}
 
 	public List<Nota> getNotas() {
+		if (this.notas == null) {
+			this.notas = new ArrayList<Nota>();
+		}
 		return notas;
 	}
 
@@ -93,6 +96,18 @@ public class Aluno {
 
 		list.add(habilidade);
 		this.setHabilidades(list);
+
+	}
+
+	public void addNota(Nota nota) throws IllegalAccessException {
+		List<Nota> list = this.getNotas();
+
+		if (nota == null) {
+			throw new IllegalAccessException("O parâmetro notas é requerido");
+		}
+
+		list.add(nota);
+		this.setNotas(list);
 
 	}
 
