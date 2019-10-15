@@ -20,6 +20,8 @@ public class Aluno {
 
 	private List<Habilidade> habilidades;
 
+	private Contato contato;
+
 	public ObjectId getId() {
 		return id;
 	}
@@ -109,6 +111,14 @@ public class Aluno {
 		list.add(nota);
 		this.setNotas(list);
 
+	}
+
+	public Contato getContato() {
+		return contato;
+	}
+
+	public void setContato(Contato contato) {
+		this.contato = contato;
 	}
 
 }
