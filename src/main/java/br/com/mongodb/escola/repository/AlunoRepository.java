@@ -73,6 +73,23 @@ public class AlunoRepository {
 		return alunos;
 	}
 
+	public List<Aluno> pesquisarPor(String classificacao, Double nota) {
+		createConnection();
+
+		MongoCursor<Aluno> results= null;
+
+		if (classificacao.equals("reprovado")) {
+			results = alunosCollection.find(Filters.lt("notas", nota)).iterator();
+		} else {
+			results = alunosCollection.find(Filters.gte("notas", nota)).iterator();
+		}
+
+		List<Aluno> alunos = addAlunos(results);
+
+		closeConnection();
+		return alunos;
+	}
+
 	private void closeConnection() {
 		client.close();
 	}
