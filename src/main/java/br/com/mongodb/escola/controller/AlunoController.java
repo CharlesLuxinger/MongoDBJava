@@ -1,5 +1,6 @@
 package br.com.mongodb.escola.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.google.maps.errors.ApiException;
+
 import br.com.mongodb.escola.model.Aluno;
 import br.com.mongodb.escola.repository.AlunoRepository;
+import br.com.mongodb.escola.service.GeolocalizacaoService;
 
 @Controller
 @RequestMapping(value = "aluno")
@@ -21,6 +25,9 @@ public class AlunoController {
 
 	@Autowired
 	private AlunoRepository alunoRepository;
+
+	@Autowired
+	private GeolocalizacaoService geolocalizacaoService;
 
 	@GetMapping("/listar")
 	public String listar(Model model) {
@@ -44,7 +51,15 @@ public class AlunoController {
 
 	@PostMapping("/salvar")
 	public String salvar(@ModelAttribute Aluno aluno) {
-		alunoRepository.salvar(aluno);
+
+		try {
+			List<Double> lateLong = geolocalizacaoService.getLateLongBy(aluno.getContato());
+			aluno.getContato().setCoordinates(lateLong);
+			alunoRepository.salvar(aluno);
+		} catch (ApiException | InterruptedException | IOException e) {
+			e.printStackTrace();
+		}
+
 		return "redirect:/";
 	}
 

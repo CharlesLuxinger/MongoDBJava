@@ -16,6 +16,7 @@ import org.bson.codecs.EncoderContext;
 import org.bson.types.ObjectId;
 
 import br.com.mongodb.escola.model.Aluno;
+import br.com.mongodb.escola.model.Contato;
 import br.com.mongodb.escola.model.Curso;
 import br.com.mongodb.escola.model.Habilidade;
 import br.com.mongodb.escola.model.Nota;
@@ -36,6 +37,7 @@ public class AlunoCodec implements CollectibleCodec<Aluno> {
 		Curso curso = aluno.getCurso();
 		List<Habilidade> habilidades = aluno.getHabilidades();
 		List<Nota> notas = aluno.getNotas();
+		Contato contato = aluno.getContato();
 
 		Document document = new Document();
 
@@ -49,7 +51,7 @@ public class AlunoCodec implements CollectibleCodec<Aluno> {
 
 			habilidades.forEach(habilidade ->
 			habilidadesDocument.add(new Document("nome", habilidade.getNome())
-										.append("nivel", habilidade.getNivel())));
+					.append("nivel", habilidade.getNivel())));
 
 			document.put("habilidades", habilidadesDocument);
 		}
@@ -62,6 +64,16 @@ public class AlunoCodec implements CollectibleCodec<Aluno> {
 
 			document.put("notas", notasList);
 		}
+
+		List<Double> coordinates = new ArrayList<Double>();
+		for (Double location : contato.getCoordinates()) {
+			coordinates.add(location);
+		}
+
+		document.put("contato", new Document()
+				.append("endereco" , contato.getEndereco())
+				.append("coordinates", coordinates)
+				.append("type", contato.getType()));
 
 		codec.encode(writer, document, encoderContext);
 	}
@@ -108,6 +120,13 @@ public class AlunoCodec implements CollectibleCodec<Aluno> {
 							habilidadeDoc.getString("nivel"))));
 
 			aluno.setHabilidades(habilidadeList);
+		}
+
+		Document contato = (Document) document.get("contato");
+		if (contato != null) {
+			String endereco = contato.getString("contato");
+			List<Double> coordinates = (List<Double>) contato.get("coordinates");
+			aluno.setContato(new Contato(endereco, coordinates));
 		}
 
 		return aluno;
