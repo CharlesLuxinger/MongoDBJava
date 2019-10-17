@@ -103,8 +103,8 @@ public class AlunoRepository {
 
 		MongoCursor<Aluno> resultados = alunosCollection
 											.find(Filters.nearSphere("contato", pontoReferencia, 2000.0, 0.0))
-														 .limit(2)
-														 .skip(1)
+														 .limit(10)
+														 //.skip(1)
 														 .iterator();
 		List<Aluno> alunos = addAlunos(resultados);
 

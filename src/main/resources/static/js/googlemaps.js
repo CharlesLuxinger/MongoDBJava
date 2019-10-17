@@ -7,14 +7,14 @@ function autoComplete(){
 
 function initMap() {
 	var brasil = {
-		lat : -14.239183,
-		lng : -51.913726
+		lat : -23.5996547,
+		lng : -46.6639453
 	};
 
 	var map = new google.maps.Map(document.getElementById('map'), {
 		center : brasil,
 		scrollwheel : false,
-		zoom : 4
+		zoom : 12
 	});
 	
 	for (index = 0; index < alunos.length; ++index) {

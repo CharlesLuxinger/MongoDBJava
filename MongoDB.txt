@@ -3,25 +3,36 @@
 
 2. Insert
     > db.alunos.insert(
-                        {
-                                "nome" : "Charles",
-                                "data_nascimento" : new Date(1988,06,02),
-                                "curso" : {
-                                    "nome" : "Sistema de Informação"
-                                },
-                                "notas" : [10.0, 9.5, 8.7],
-                                "skills":[
-                                    {
-                                        "nome" : "Inglês",
-                                        "nível": "Intermediário"
-
-                                    },
-                                    {
-                                        "nome" : "Java",
-                                        "nível": "Avançado"
-                                    }
-                                ]
-                        }
+        {
+    "nome" : "Felipe",
+    "data_nascimento" : ISODate("1994-03-26T03:00:00.000Z"),
+    "curso" : {
+        "nome" : "Sistemas de informação"
+    },
+    "notas" : [ 
+        10.0, 
+        9.0, 
+        4.0
+    ],
+    "habilidades" : [ 
+        {
+            "nome" : "inglês",
+            "nivel" : "avançado"
+        }, 
+        {
+            "nome" : "taekwondo",
+            "nivel" : "básico"
+        }
+    ],
+    "contato" : {
+        "endereco" : "R. Dona Avelina, 10 - Vila Mariana, São Paulo - SP, 04111-010",
+        "coordinates" : [ 
+            -23.586917, 
+            -46.633484
+        ],
+        "type" : "Point"
+    }
+}
                       )
 
 3. Query
